@@ -277,7 +277,10 @@ $(document).ready(function(){
         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
+        <a class="nav-link" href="#register" data-toggle="modal" >Daftar</a>
+      </li>
+	  <li class="nav-item">
+        <a class="nav-link" href="#login" data-toggle="modal" >Login</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -289,7 +292,7 @@ $(document).ready(function(){
           
       </li>
       <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
+        <a class="nav-link disabled" href="#">{{ $email }}</a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
@@ -353,9 +356,96 @@ $(document).ready(function(){
                         <td>{{ $data->Jurusan}}</td>
                         <td>{{ $data->Universitas}}</td>
                         <td><a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+
+
+							
+
+
 							<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a></td>
+
+
+
+
 						</td>
 					</tr>
+
+
+
+					<!-- Delete Modal HTML -->
+						<div id="deleteEmployeeModal" class="modal fade">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<form action="surat/{{ $data->id}}"  method="POST">
+										@csrf
+										@method('DELETE')
+										
+										<div class="modal-header">						
+											<h4 class="modal-title">Delete Employee</h4>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+										</div>
+										<div class="modal-body">					
+											<p>Are you sure you want to delete these Records?</p>
+											<p class="text-warning"><small>This action cannot be undone.</small></p>
+										</div>
+										<div class="modal-footer">
+											<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+											<input type="submit" class="btn btn-danger" value="Delete">
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+
+
+
+				<!-- Edit Modal HTML -->
+				<div id="editEmployeeModal" class="modal fade">
+				<div class="modal-dialog">
+						<div class="modal-content">
+							<form action="surat/{{$data->id}}" method="POST">
+								@csrf
+								@method('PUT')
+								<div class="modal-header">						
+									<h4 class="modal-title">Tambahan Surat</h4>
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								</div>
+								<div class="modal-body">					
+									<div class="form-group">
+										<label>Kode Surat</label>
+										<input type="text" name="kode" value="{{$data -> Kode_surat}}" class="form-control" required>
+									</div>
+									<div class="form-group">
+										<label>Tanggal Surat</label>
+										<input type="date" name="tanggal"  value="{{$data -> Tanggal_surat}}"   class="form-control" required>
+										
+									</div>
+									<div class="form-group">
+										<label>Isi Surat</label>
+										<input type="file" name="isi"  value="{{$data -> Isi_surat_masuk}}"  	 class="form-control" required>
+									</div>
+									<div class="form-group">
+										<label>Jurusan</label>
+										<input type="text" name="jurusan" 	value="{{$data -> Fakultas}}"	class="form-control" >
+									</div>		
+									<div class="form-group">
+										<label>Fakultas</label>
+										<input type="text" name="fakultas"   value="{{$data -> Jurusan}}"   class="form-control" >
+									</div>	
+									<div class="form-group">
+										<label>Universitas</label>
+										<input type="text" name="universitas"   value="{{$data -> Universitas}}"  class="form-control" >
+									</div>				
+								</div>
+								<div class="modal-footer">
+									<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+									<input type="submit" class="btn btn-success" value="Add">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+
 				@endforeach
 				
 			</table>
@@ -380,12 +470,13 @@ $(document).ready(function(){
 		</div>
 	</div>        
 </div>
-<!-- Edit Modal HTML -->
+<!-- ADD Modal HTML -->
 <div id="addEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<form action="{{url('surat')}}" method="POST">
 				@csrf
+            	
 				<div class="modal-header">						
 					<h4 class="modal-title">Tambahan Surat</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -424,61 +515,79 @@ $(document).ready(function(){
 		</div>
 	</div>
 </div>
-<!-- Edit Modal HTML -->
-<div id="editEmployeeModal" class="modal fade">
+
+<!-- Register Modal HTML -->
+<div id="register" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form>
+			<form action="register" method="POST">
+				@csrf
+            	
 				<div class="modal-header">						
-					<h4 class="modal-title">Edit Employee</h4>
+					<h4 class="modal-title">Register</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
-				<div class="modal-body">					
-					<div class="form-group">
-						<label>Name</label>
-						<input type="text" class="form-control" required>
+				<div class="modal-body">	
+					
+				<div class="form-group">
+						<label>name</label>
+						<input type="text" name="name" class="form-control" required>
 					</div>
+
 					<div class="form-group">
-						<label>Email</label>
-						<input type="email" class="form-control" required>
+						<label>email</label>
+						<input type="text" name="email" class="form-control" required>
 					</div>
+
 					<div class="form-group">
-						<label>Address</label>
-						<textarea class="form-control" required></textarea>
+						<label>password</label>
+						<input type="text" name="password" class="form-control" required>
 					</div>
-					<div class="form-group">
-						<label>Phone</label>
-						<input type="text" class="form-control" required>
-					</div>					
+							
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-info" value="Save">
+					<input type="submit" class="btn btn-success" value="Add">
 				</div>
 			</form>
 		</div>
 	</div>
 </div>
-<!-- Delete Modal HTML -->
-<div id="deleteEmployeeModal" class="modal fade">
+
+
+<div id="login" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form>
+			<form action="login" method="POST">
+				@csrf
+            	
 				<div class="modal-header">						
-					<h4 class="modal-title">Delete Employee</h4>
+					<h4 class="modal-title">login</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
-				<div class="modal-body">					
-					<p>Are you sure you want to delete these Records?</p>
-					<p class="text-warning"><small>This action cannot be undone.</small></p>
+				<div class="modal-body">	
+					
+
+					<div class="form-group">
+						<label>email</label>
+						<input type="text" name="email" class="form-control" required>
+					</div>
+
+					<div class="form-group">
+						<label>password</label>
+						<input type="text" name="password" class="form-control" required>
+					</div>
+							
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-danger" value="Delete">
+					<input type="submit" class="btn btn-success" value="Add">
 				</div>
 			</form>
 		</div>
 	</div>
 </div>
+
+
 </body>
 </html>

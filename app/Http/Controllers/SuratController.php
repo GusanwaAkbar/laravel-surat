@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+ 
+
 
 class SuratController extends Controller
 {
@@ -14,8 +17,12 @@ class SuratController extends Controller
             'Isi_surat_masuk'=> $request -> isi,
             'Fakultas'=> $request -> fakultas,
             'Jurusan'=> $request -> jurusan,
-            'Universitas'=> $request -> universitas
+            'Universitas'=> $request -> universitas,
+            'user_id' => Auth::user()->id,
         ]);
+
+
+
         return redirect('surat')->with('status','Surat berhasil ditambahkan');
     }
     public function tambah_notulen(Request $request){
@@ -45,14 +52,28 @@ class SuratController extends Controller
 
 
     public function surat(){
-        
 
-        $select = DB::select('select * from surat_masuks');
-        return view ('surat_views')->with('name',$select);
+        if (is_null(optional(Auth::user())->id)) {
 
-        
+            $select = DB::select('select * from show_null');
+            // do somethin
+            return view('surat_views')->with('name', $select)->with('email', 'harap login terlebih dahulu');
+        }
+
+        else {
+
+
+            $user = Auth::user()->id;
+
+            $select = DB::table('surat_masuks')->where('user_id', $user)->get();
+            // Get the currently authenticated user's ID...
+            $email = Auth::user()->email;
+            return view('surat_views')->with('name', $select)->with('email', $email);
+        }
 
     }
+
+
     public function keluar(){
 
         $select = DB::select('select * from surat_keluars');
@@ -74,10 +95,35 @@ class SuratController extends Controller
     public function delete_surat($id)
     
     {
-        $post = Post::find($id); 
-        $post->delete();
-        return redirect('/surat')->with(); 
+
+        print($id);
+        $post = DB::table('surat_masuks')->where('id',$id)->delete() ;
+        
+
+
+        return redirect('surat');
     }
+
+
+    public function update_surat($id,Request $request){
+
+
+
+        $post = DB::table('surat_masuks')->where('id',$id)->update([
+            'Kode_surat'=> $request -> kode,
+            'Tanggal_surat'=> $request -> tanggal,
+            'Isi_surat_masuk'=> $request -> isi,
+            'Fakultas'=> $request -> fakultas,
+            'Jurusan'=> $request -> jurusan,
+            'Universitas'=> $request -> universitas
+        ]);
+         
+        
+
+      
+        return redirect('surat')->with('status','Surat berhasil ditambahkan');
+    }
+
 
     public function delete_keluar($id)
     

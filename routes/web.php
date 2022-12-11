@@ -13,11 +13,14 @@ use App\Http\Controllers\SuratController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::post('/register', App\Http\Controllers\Api\RegisterController::class)->name('register');
+Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('login');
 
 
 Route::post('/surat',[SuratController::class, 'input']);
 Route::get('/surat',[SuratController::class, 'surat']);
+Route::delete('/surat/{id}',[SuratController::class, 'delete_surat']);
+Route::put('/surat/{id}',[SuratController::class, 'update_surat']);
 
 
 Route::post('/keluar',[SuratController::class, 'tambah']);

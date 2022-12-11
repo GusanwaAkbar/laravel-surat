@@ -23,6 +23,8 @@ class CreateSuratMasuksTable extends Migration
             $table->string('Jurusan');
             $table->string('Universitas');
             $table->timestamps();
+            $table->foreignId('user_id');
+
         });
     }
 
